@@ -53,6 +53,8 @@
         android:layout_marginEnd="@dimen/common_spacing"
         android:background="@android:color/transparent"
         android:contentDescription="@string/descr_menu"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/author"
         app:srcCompat="@drawable/ic_baseline_more_vert_24" />
@@ -60,15 +62,15 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/contentPost"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constrainedHeight="true"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBarrier"
-
+app:layout_constraintBottom_toTopOf="@id/textView"
         tools:text="@tools:sample/lorem/random" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -84,34 +86,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_spacing"
         android:layout_marginTop="@dimen/common_spacing"
-        android:layout_marginBottom="@dimen/foot_vert_spacing"
-        android:contentDescription="@string/favorit_button"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/favorit_button"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contentPost"
         app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/footBarrier"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:barrierDirection="top"
-        android:layout_marginTop="@dimen/common_spacing"
-        app:constraint_referenced_ids="imageButtonFavorit,likeCount,imageButtonShare,shareCount,imageEye,eyeCount" />
 
-<androidx.appcompat.widget.AppCompatTextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/likeCount"
-    android:layout_marginStart="@dimen/foot_horiz_spacing"
-    android:layout_marginTop="@dimen/common_spacing"
-    android:layout_marginBottom="@dimen/foot_vert_spacing"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toEndOf="@id/imageButtonFavorit"
-    app:layout_constraintTop_toBottomOf="@id/contentPost"
-    tools:text="4558"
-    />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/likeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/foot_horiz_spacing"
+
+        app:layout_constraintBottom_toBottomOf="@+id/imageButtonFavorit"
+        app:layout_constraintStart_toEndOf="@id/imageButtonFavorit"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonFavorit"
+        tools:text="4558" />
 
     <ImageButton
         android:id="@+id/imageButtonShare"
@@ -120,54 +114,59 @@
         android:layout_marginStart="@dimen/common_spacing"
         android:layout_marginTop="@dimen/common_spacing"
         android:layout_marginBottom="@dimen/foot_vert_spacing"
-        android:contentDescription="@string/button_share"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/button_share"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+
         app:layout_constraintStart_toEndOf="@id/likeCount"
         app:layout_constraintTop_toBottomOf="@id/contentPost"
         app:srcCompat="@drawable/ic_baseline_share_24" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/shareCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/shareCount"
         android:layout_marginStart="@dimen/foot_horiz_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:layout_marginBottom="@dimen/foot_vert_spacing"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintBottom_toBottomOf="@+id/imageButtonShare"
         app:layout_constraintStart_toEndOf="@id/imageButtonShare"
-        app:layout_constraintTop_toBottomOf="@id/contentPost"
-        tools:text="556"
-        />
+        app:layout_constraintTop_toTopOf="@+id/imageButtonShare"
+        tools:text="556" />
 
     <ImageView
         android:id="@+id/imageEye"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_baseline_remove_red_eye_24"
-        app:layout_constraintEnd_toStartOf="@id/eyeCount"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contentPost"
-        android:layout_marginBottom="@dimen/foot_vert_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
         android:layout_marginEnd="@dimen/foot_horiz_spacing"
         android:contentDescription="@string/eye_icon_image"
-  />
+
+        app:layout_constraintBottom_toBottomOf="@+id/imageButtonShare"
+        app:layout_constraintEnd_toStartOf="@id/eyeCount"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonShare"
+        app:srcCompat="@drawable/ic_baseline_remove_red_eye_24" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/eyeCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/eyeCount"
-        android:layout_marginStart="@dimen/foot_horiz_spacing"
         android:layout_marginEnd="@dimen/common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:layout_marginBottom="@dimen/foot_vert_spacing"
 
         android:contentDescription="@string/favorit_button"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintBottom_toBottomOf="@+id/imageEye"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contentPost"
-        tools:text="896"
-        />
+        app:layout_constraintTop_toTopOf="@+id/imageEye"
+        tools:text="896" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
