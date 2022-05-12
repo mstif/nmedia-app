@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/top_avatar"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginStart="@dimen/common_spacing"
@@ -29,8 +29,8 @@
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/published"
         app:layout_constraintEnd_toStartOf="@id/imageButton"
-        app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintStart_toEndOf="@id/top_avatar"
+        app:layout_constraintTop_toTopOf="@id/top_avatar"
         tools:text="Имя автора поста" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -41,8 +41,8 @@
         android:layout_marginEnd="@dimen/common_spacing"
         android:ellipsize="end"
         android:singleLine="true"
-        app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="@id/top_avatar"
+        app:layout_constraintStart_toEndOf="@id/top_avatar"
         app:layout_constraintTop_toBottomOf="@id/author"
         tools:text="12.05.2022 " />
 
@@ -58,18 +58,116 @@
         app:srcCompat="@drawable/ic_baseline_more_vert_24" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/contentPost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/headerBarrier"
-        tools:text="@tools:sample/lorem/random"
-        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/common_spacing"
-        />
+        android:layout_marginTop="@dimen/common_spacing"
+
+        android:ellipsize="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBarrier"
+
+        tools:text="@tools:sample/lorem/random" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/headerBarrier"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="author,imageView,published"/>
+        app:constraint_referenced_ids="author,top_avatar,published" />
+
+    <ImageButton
+        android:id="@+id/imageButtonFavorit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginBottom="@dimen/foot_vert_spacing"
+        android:contentDescription="@string/favorit_button"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentPost"
+        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/footBarrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="top"
+        android:layout_marginTop="@dimen/common_spacing"
+        app:constraint_referenced_ids="imageButtonFavorit,likeCount,imageButtonShare,shareCount,imageEye,eyeCount" />
+
+<androidx.appcompat.widget.AppCompatTextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/likeCount"
+    android:layout_marginStart="@dimen/foot_horiz_spacing"
+    android:layout_marginTop="@dimen/common_spacing"
+    android:layout_marginBottom="@dimen/foot_vert_spacing"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@id/imageButtonFavorit"
+    app:layout_constraintTop_toBottomOf="@id/contentPost"
+    tools:text="4558"
+    />
+
+    <ImageButton
+        android:id="@+id/imageButtonShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginBottom="@dimen/foot_vert_spacing"
+        android:contentDescription="@string/button_share"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/likeCount"
+        app:layout_constraintTop_toBottomOf="@id/contentPost"
+        app:srcCompat="@drawable/ic_baseline_share_24" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/shareCount"
+        android:layout_marginStart="@dimen/foot_horiz_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginBottom="@dimen/foot_vert_spacing"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonShare"
+        app:layout_constraintTop_toBottomOf="@id/contentPost"
+        tools:text="556"
+        />
+
+    <ImageView
+        android:id="@+id/imageEye"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_baseline_remove_red_eye_24"
+        app:layout_constraintEnd_toStartOf="@id/eyeCount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentPost"
+        android:layout_marginBottom="@dimen/foot_vert_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginEnd="@dimen/foot_horiz_spacing"
+        android:contentDescription="@string/eye_icon_image"
+  />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/eyeCount"
+        android:layout_marginStart="@dimen/foot_horiz_spacing"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginBottom="@dimen/foot_vert_spacing"
+
+        android:contentDescription="@string/favorit_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentPost"
+        tools:text="896"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
