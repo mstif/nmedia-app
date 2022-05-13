@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">nMedia</string>
     <string name="nmedia">NMedia!</string>
+    <string name="descr_avatar">Netology avatar</string>
+    <string name="descr_menu">Menu button</string>
+    <string name="favorit_button">Like button</string>
+    <string name="eye_icon_image">Eye icon image</string>
+    <string name="button_share">Button share</string>
 </resources>

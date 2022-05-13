@@ -2,4 +2,9 @@
 <resources>
     <string name="app_name">НМедиа</string>
     <string name="nmedia">НМедиа!</string>
+    <string name="descr_avatar">Аватар Нетологии</string>
+    <string name="descr_menu">Кнопка меню</string>
+    <string name="favorit_button">Кнопка \"Нравится\"</string>
+    <string name="eye_icon_image">Иконка количества просмотров</string>
+    <string name="button_share">Кнопка \"Поделиться\"</string>
 </resources>
