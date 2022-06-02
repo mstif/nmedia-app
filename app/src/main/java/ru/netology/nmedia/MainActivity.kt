@@ -3,8 +3,11 @@ package ru.netology.nmedia
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.children
+import ru.netology.nmedia.data.impl.PostsAdapter
 import ru.netology.nmedia.data.viewModel.PostViewModel
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.databinding.PostBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,22 +16,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        with(binding) {
+        val adapter = PostsAdapter(viewModel::onLikeClicked,viewModel::onShareClicked)
+        binding.container.adapter = adapter
+        viewModel.dataViewModel.observe(this) { posts ->
+            adapter.submitList(posts)
 
-            imageButtonFavorit.setOnClickListener {
-                viewModel.onLikeClicked()
-            }
-            imageButtonShare.setOnClickListener {
-                viewModel.onShareClicked()
-            }
-        }
-
-        viewModel.dataViewModel.observe(this) { post ->
-            binding.render(post)
         }
 
 
     }
+
+
 
 
 }
@@ -58,18 +56,9 @@ fun getStringOfCount(count: Int): String {
 
         }
     }
+
+
 }
 
-fun ActivityMainBinding.render(post: Post) {
-    imageButtonFavorit.setImageResource(
-        if (post.liked) R.drawable.ic_liked_24 else
-            R.drawable.ic_baseline_favorite_border_24
-    )
 
-    contentPost.text = post.content
-    author.text = post.author
-    published.text = post.published
-    likeCount.text = getStringOfCount(post.likeCount)
-    shareCount.text = getStringOfCount(post.shareCount)
-    eyeCount.text = getStringOfCount(post.seenCount)
-}
+
