@@ -18,6 +18,8 @@ class PostViewModel : ViewModel(), PostInteractionListener {
         currentPost.value = post
     }
 
+
+
     fun onSaveButtonClicked(content: String) {
         if(content.isBlank())return
 
