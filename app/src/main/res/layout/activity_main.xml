@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/post"
-        app:layout_constraintBottom_toTopOf="@id/toolsTop"
+        app:layout_constraintBottom_toTopOf="@id/tools2Top"
         app:layout_constraintTop_toTopOf="parent"
         />
     <androidx.constraintlayout.widget.Barrier
@@ -22,6 +22,51 @@
         android:layout_height="wrap_content"
         app:barrierDirection="top"
         app:constraint_referenced_ids="content,save" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/tools2Top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="content,save,imageEdit,canselEdit" />
+    <ImageView
+        android:id="@+id/imageEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/foot_horiz_spacing"
+        android:contentDescription="edit avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/toolsTop"
+
+
+        app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+    <ImageButton
+        android:id="@+id/canselEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/favorit_button"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:srcCompat="@drawable/ic_baseline_cancel_24"
+        app:layout_constraintBottom_toTopOf="@id/toolsTop"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/shadowContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+
+        android:contentDescription="@string/favorit_button"
+        app:layout_constraintTop_toTopOf="@id/tools2Top"
+        app:layout_constraintStart_toEndOf="@id/imageEdit"
+        app:layout_constraintEnd_toStartOf="@id/canselEdit"
+        app:layout_constraintBottom_toTopOf="@id/toolsTop"
+
+        tools:text="edited post content here..." />
 
     <EditText
         android:id="@+id/content"
@@ -35,6 +80,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="canselEdit,imageEdit,shadowContent" />
 
     <ImageButton
         android:id="@+id/save"
