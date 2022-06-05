@@ -3,11 +3,10 @@ package ru.netology.nmedia
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.view.children
-import ru.netology.nmedia.data.impl.PostsAdapter
+import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.data.viewModel.PostViewModel
 import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.databinding.PostBinding
+import ru.netology.nmedia.utils.hideKeyboard
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,13 +15,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val adapter = PostsAdapter(viewModel::onLikeClicked,viewModel::onShareClicked)
+        val adapter = PostsAdapter(viewModel)
         binding.container.adapter = adapter
         viewModel.dataViewModel.observe(this) { posts ->
             adapter.submitList(posts)
-
         }
-
+        binding.save.setOnClickListener {
+            with(binding.content) {
+                val content = text.toString()
+                viewModel.onSaveButtonClicked(content)
+                clearFocus()
+                hideKeyboard()
+            }
+        }
+        viewModel.currentPost.observe(this){currenPost->
+            binding.content.setText(currenPost?.content)
+        }
 
     }
 

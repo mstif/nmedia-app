@@ -27,7 +27,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/published"
-        app:layout_constraintEnd_toStartOf="@id/imageButton"
+        app:layout_constraintEnd_toStartOf="@id/dropdown_menu"
         app:layout_constraintStart_toEndOf="@id/top_avatar"
         app:layout_constraintTop_toTopOf="@id/top_avatar"
         tools:text="Имя автора поста" />
@@ -46,7 +46,7 @@
         tools:text="12.05.2022 " />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/dropdown_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/common_spacing"
@@ -66,9 +66,9 @@
         android:layout_marginTop="@dimen/common_spacing"
         android:ellipsize="end"
         app:layout_constrainedHeight="true"
-        app:layout_constraintVertical_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBarrier"
+        app:layout_constraintVertical_bias="0"
 
         tools:text="@tools:sample/lorem/random" />
 
