@@ -2,8 +2,11 @@ package ru.netology.nmedia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.data.viewModel.PostViewModel
 import ru.netology.nmedia.databinding.ActivityMainBinding
@@ -38,6 +41,12 @@ class MainActivity : AppCompatActivity() {
                 content.hideKeyboard()
                 content.setText("")
                 shadowContent.setText("")
+                viewModel.currentPost.value = null
+            }
+        }
+        binding.content.doAfterTextChanged {
+            if (!binding.content.text.isBlank()) {
+                binding.group.visibility = View.VISIBLE
             }
         }
         viewModel.currentPost.observe(this) { currenPost ->
@@ -45,7 +54,10 @@ class MainActivity : AppCompatActivity() {
             if (currenPost?.content != null && !currenPost.content.isBlank()) {
                 binding.group.visibility = View.VISIBLE
                 binding.shadowContent.setText(currenPost.content)
-                if (binding.content != null) binding.content.requestFocus()
+
+                binding.content.requestFocus()
+
+
             }
         }
 
