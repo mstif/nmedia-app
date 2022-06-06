@@ -7,4 +7,7 @@
     <string name="favorit_button">Кнопка \"Нравится\"</string>
     <string name="eye_icon_image">Иконка количества просмотров</string>
     <string name="button_share">Кнопка \"Поделиться\"</string>
+    <string name="remove">Удалить</string>
+    <string name="post_text">Введите текст</string>
+    <string name="menu_edit">Изменить</string>
 </resources>
