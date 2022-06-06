@@ -52,17 +52,14 @@ class PostsAdapter(
 
         fun bind(post: Post) = with(binding) {
             this@ViewHolder.post = post
-            imageButtonFavorit.setImageResource(
-                if (post.liked) R.drawable.ic_liked_24 else
-                    R.drawable.ic_baseline_favorite_border_24
-            )
-
+            imageButtonFavorit.isChecked = post.liked
+            imageButtonFavorit.text = getStringOfCount(post.likeCount)
             contentPost.text = post.content
             author.text = post.author
             published.text = post.published
-            likeCount.text = getStringOfCount(post.likeCount)
-            shareCount.text = getStringOfCount(post.shareCount)
-            eyeCount.text = getStringOfCount(post.seenCount)
+
+            imageButtonShare.text = getStringOfCount(post.shareCount)
+            imageEye.text = getStringOfCount(post.seenCount)
             dropdownMenu.setOnClickListener { popupMenu.show() }
 
         }
