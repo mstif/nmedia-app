@@ -1,11 +1,15 @@
 package ru.netology.nmedia.data.impl
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.data.PostRepository
+import x.y.z.SingleLiveEvent
 
 class InMemoryPostRepository : PostRepository {
     override val data = MutableLiveData(Post.demoDataPost())
+    override val sharePostContent = SingleLiveEvent<String>()
+    override val currentPost = MutableLiveData<Post?>(null)
 
     private val posts get() = checkNotNull(data.value) { "Data value should not be null" }
 
@@ -23,7 +27,7 @@ class InMemoryPostRepository : PostRepository {
 
     override fun share(id: Long) {
 
-        data.value = posts.map { if (it.id == id) it.copy(shareCount = it.shareCount + 1) else it }
+        data.value = posts.map { if (it.id == id) it.copy(shareCount = it.shareCount + 1).apply { sharePostContent.value = it.content } else it }
 
     }
 

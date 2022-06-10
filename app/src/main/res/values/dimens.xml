@@ -4,5 +4,6 @@
     <dimen name="foot_vert_spacing">32dp</dimen>
     <dimen name="foot_horiz_spacing">8dp</dimen>
     <dimen name="max_height_editView">150dp</dimen>
+    <dimen name="fab_margin">4dp</dimen>
 
 </resources>

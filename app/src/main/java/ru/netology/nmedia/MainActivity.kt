@@ -1,9 +1,11 @@
 package ru.netology.nmedia
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.View
+import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -19,46 +21,56 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.group.visibility = View.GONE
+
+
         val adapter = PostsAdapter(viewModel)
         binding.container.adapter = adapter
         viewModel.dataViewModel.observe(this) { posts ->
             adapter.submitList(posts)
         }
-        binding.save.setOnClickListener {
-            with(binding.content) {
-                val content = text.toString()
-                viewModel.onSaveButtonClicked(content)
-                binding.group.visibility = View.GONE
-                clearFocus()
-                hideKeyboard()
-            }
+        binding.fab.setOnClickListener {
+            viewModel.onAddClicked()
         }
-        binding.canselEdit.setOnClickListener {
-            with(binding){
-                group.visibility = View.GONE
-                content.clearFocus()
-                content.hideKeyboard()
-                content.setText("")
-                shadowContent.setText("")
-                viewModel.currentPost.value = null
-            }
-        }
-        binding.content.doAfterTextChanged {
-            if (!binding.content.text.isBlank()) {
-                binding.group.visibility = View.VISIBLE
-            }
-        }
-        viewModel.currentPost.observe(this) { currenPost ->
-            binding.content.setText(currenPost?.content)
-            if (currenPost?.content != null && !currenPost.content.isBlank()) {
-                binding.group.visibility = View.VISIBLE
-                binding.shadowContent.setText(currenPost.content)
-
-                binding.content.requestFocus()
 
 
+
+//        viewModel.currentPost.observe(this) { currenPost ->
+//            binding.content.setText(currenPost?.content)
+//            if (currenPost?.content != null && !currenPost.content.isBlank()) {
+//                binding.group.visibility = View.VISIBLE
+//                binding.shadowContent.setText(currenPost.content)
+//
+//                binding.content.requestFocus()
+//
+//
+//            }
+//        }
+
+
+
+        viewModel.sharePostContentModel.observe(this){postContent->
+            val intent = Intent().apply {
+                action  = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT,postContent)
+                type = "text/plain"
             }
+            val shareIntent = Intent.createChooser(intent,getString(R.string.chooser_share_post))
+            startActivity(shareIntent)
+        }
+
+        val postContentActivityResultContract = PostContentActivity.ResultContract()//комментарим потому что это сделали object
+       val postContentActivityLouncher = registerForActivityResult(postContentActivityResultContract){postContent->
+           if(postContent==null){
+               viewModel.currentPost.value = null
+               return@registerForActivityResult
+           }
+           viewModel.onSaveButtonClicked(postContent)
+       }
+        viewModel.navigateToPostScreenEvent.observe(this){
+
+            postContentActivityLouncher.launch(it)
+
+
         }
 
     }
