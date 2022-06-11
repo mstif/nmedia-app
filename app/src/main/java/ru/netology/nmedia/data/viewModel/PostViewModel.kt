@@ -14,11 +14,10 @@ class PostViewModel : ViewModel(), PostInteractionListener {
     val dataViewModel by repository::data
     val sharePostContentModel by repository::sharePostContent
     val navigateToPostScreenEvent = SingleLiveEvent<String>()
+    val playVideoFromPost = SingleLiveEvent<String>()
     val currentPost by repository::currentPost
     override fun onLikeClicked(post: Post) = repository.like(post.id)
-    override fun onShareClicked(post: Post) {
-        repository.share(post.id)
-    }
+    override fun onShareClicked(post: Post)= repository.share(post.id)
     override fun onDeleteClicked(post: Post) = repository.delete(post.id)
     override fun onEditClicked(post: Post) {
         currentPost.value = post
@@ -26,6 +25,9 @@ class PostViewModel : ViewModel(), PostInteractionListener {
         //navigateToPostScreenEvent.call()
     }
 
+    override fun onPlayVideo(url: String) {
+        playVideoFromPost.value = url
+    }
 
 
     fun onSaveButtonClicked(content: String) {

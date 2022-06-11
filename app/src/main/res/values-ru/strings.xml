@@ -13,4 +13,5 @@
     <string name="chooser_share_post">Поделиться</string>
     <string name="description_post_save">Сохранить</string>
     <string name="add_post">Новый пост</string>
+    <string name="chooser_player">Выбор приложения для проигрывания</string>
 </resources>

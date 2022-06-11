@@ -1,6 +1,7 @@
 package ru.netology.nmedia
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextWatcher
@@ -58,6 +59,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
+        viewModel.playVideoFromPost.observe(this){videoUrl->
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+
+            val videoPlayIntent = Intent.createChooser(intent,getString(R.string.chooser_player))
+            if (videoPlayIntent.resolveActivity(packageManager) != null) {
+                startActivity(videoPlayIntent)
+            }
+        }
+
         val postContentActivityResultContract = PostContentActivity.ResultContract()//комментарим потому что это сделали object
        val postContentActivityLouncher = registerForActivityResult(postContentActivityResultContract){postContent->
            if(postContent==null){
@@ -72,6 +82,7 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+
 
     }
 
