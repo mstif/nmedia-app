@@ -1,41 +1,25 @@
 package ru.netology.nmedia
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.result.launch
-import androidx.activity.viewModels
-import androidx.core.content.edit
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
-import com.google.android.material.snackbar.Snackbar
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.data.viewModel.PostViewModel
 import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.utils.hideKeyboard
 
-class MainActivity : AppCompatActivity() {
+class FeedFragment : Fragment() {
 
     val viewModel: PostViewModel by viewModels<PostViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-
-        val adapter = PostsAdapter(viewModel)
-        binding.container.adapter = adapter
-        viewModel.dataViewModel.observe(this) { posts ->
-            adapter.submitList(posts)
-        }
-        binding.fab.setOnClickListener {
-            viewModel.onAddClicked()
-        }
-
 
 
 //        viewModel.currentPost.observe(this) { currenPost ->
@@ -64,36 +48,35 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
-        viewModel.sharePostContentModel.observe(this){postContent->
+        viewModel.sharePostContentModel.observe(this) { postContent ->
             val intent = Intent().apply {
-                action  = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT,postContent)
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, postContent)
                 type = "text/plain"
             }
-            val shareIntent = Intent.createChooser(intent,getString(R.string.chooser_share_post))
+            val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_share_post))
             startActivity(shareIntent)
         }
 
-        viewModel.playVideoFromPost.observe(this){videoUrl->
+        viewModel.playVideoFromPost.observe(this) { videoUrl ->
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
 
-            val videoPlayIntent = Intent.createChooser(intent,getString(R.string.chooser_player))
-            if (videoPlayIntent.resolveActivity(packageManager) != null) {
+            val videoPlayIntent = Intent.createChooser(intent, getString(R.string.chooser_player))
+            //if (videoPlayIntent.resolveActivity(packageManager) != null) {
                 startActivity(videoPlayIntent)
-            }
+            //}
+        }
+        setFragmentResultListener(requestKey = PostContentFragment.REQUEST_KEY){
+            requestKey, bundle ->
+            if(requestKey!=PostContentFragment.REQUEST_KEY)return@setFragmentResultListener
+            val postContent = bundle.getString(PostContentFragment.RESULT_KEY)?:return@setFragmentResultListener
+            viewModel.onSaveButtonClicked(postContent)
         }
 
-        val postContentActivityResultContract = PostContentActivity.ResultContract()//комментарим потому что это сделали object
-       val postContentActivityLouncher = registerForActivityResult(postContentActivityResultContract){postContent->
-           if(postContent==null){
-               viewModel.currentPost.value = null
-               return@registerForActivityResult
-           }
-           viewModel.onSaveButtonClicked(postContent)
-       }
-        viewModel.navigateToPostScreenEvent.observe(this){
+        viewModel.navigateToPostScreenEvent.observe(this) {initialContent->
+            findNavController().navigate(R.id.to_postContentFragment,
+            PostContentFragment.createBundle(initialContent))
 
-            postContentActivityLouncher.launch(it)
 
 
         }
@@ -101,6 +84,25 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = ActivityMainBinding.inflate(layoutInflater, container, false).also { binding ->
+
+        val adapter = PostsAdapter(viewModel)
+        binding.container.adapter = adapter
+        viewModel.dataViewModel.observe(viewLifecycleOwner) { posts ->
+            adapter.submitList(posts)
+        }
+        binding.fab.setOnClickListener {
+            viewModel.onAddClicked()
+        }
+
+    }.root
+companion object{
+    const val TAG = "FeedFragment"
+}
 
 }
 
