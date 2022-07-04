@@ -71,11 +71,22 @@ class FeedFragment : Fragment() {
             if(requestKey!=PostContentFragment.REQUEST_KEY)return@setFragmentResultListener
             val postContent = bundle.getString(PostContentFragment.RESULT_KEY)?:return@setFragmentResultListener
             viewModel.onSaveButtonClicked(postContent)
+            viewModel.currentPost.value = null
         }
+
+
 
         viewModel.navigateToPostScreenEvent.observe(this) {initialContent->
             findNavController().navigate(R.id.to_postContentFragment,
-            PostContentFragment.createBundle(initialContent))
+            PostContentFragment.createBundle(initialContent,PostContentFragment.REQUEST_KEY))
+
+
+
+        }
+        viewModel.navigateToPostSingle.observe(this) {postToSingle->
+            viewModel.currentPost.value = postToSingle
+            findNavController().navigate(R.id.postEditFragment,
+                PostEditFragment.createBundle(postToSingle.id))
 
 
 
@@ -84,20 +95,25 @@ class FeedFragment : Fragment() {
 
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = ActivityMainBinding.inflate(layoutInflater, container, false).also { binding ->
+    ): View = ActivityMainBinding.inflate(layoutInflater, container, false).also { binding ->
 
         val adapter = PostsAdapter(viewModel)
+
         binding.container.adapter = adapter
         viewModel.dataViewModel.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)
         }
         binding.fab.setOnClickListener {
+           viewModel.currentPost.value = null
             viewModel.onAddClicked()
         }
+
 
     }.root
 companion object{

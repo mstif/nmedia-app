@@ -11,7 +11,7 @@ import ru.netology.nmedia.data.PostRepository
 import ru.netology.nmedia.data.impl.FilePostRepository
 import x.y.z.SingleLiveEvent
 
-class PostViewModel(application: Application) : AndroidViewModel(application), PostInteractionListener {
+class SinglePostViewModel(application: Application) : AndroidViewModel(application), PostInteractionListener {
     private val repository: PostRepository = FilePostRepository(application)
     val dataViewModel by repository::data
     val sharePostContentModel by repository::sharePostContent
@@ -26,7 +26,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application), P
     override fun onEditClicked(post: Post) {
         currentPost.value = post
         navigateToPostScreenEvent.value = post.content
-
         //navigateToPostScreenEvent.call()
     }
 
@@ -48,9 +47,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application), P
             content = content,
             published = "Today", author = "Me"
         )
-
         repository.save(editedPost)
-       // currentPost.value = null
+        currentPost.value = null
     }
 
 

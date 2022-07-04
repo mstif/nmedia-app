@@ -10,6 +10,8 @@ class InMemoryPostRepository : PostRepository {
     override val data = MutableLiveData(Post.demoDataPost())
     override val sharePostContent = SingleLiveEvent<String>()
     override val currentPost = MutableLiveData<Post?>(null)
+   // override val currentSinglePost: MutableLiveData<Post?>
+    //    get() = TODO("Not yet implemented")
 
     private val posts get() = checkNotNull(data.value) { "Data value should not be null" }
 

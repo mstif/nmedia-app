@@ -19,13 +19,20 @@ class FilePostRepository(
     private val application: Application
 ) : PostRepository {
     private val prefs = application.getSharedPreferences("repo", Context.MODE_PRIVATE)
-    override val data:MutableLiveData<List<Post>>
+    override  val data:MutableLiveData<List<Post>>
+        get() = singltonData.data
+
     override val sharePostContent = SingleLiveEvent<String>()
-    override val currentPost = MutableLiveData<Post?>(null)
+    override val currentPost : MutableLiveData<Post?>
+        get() = singltonData.currentPost
+
+   // override val currentSinglePost = SingltonData.currentPost
     private val gson = Gson()
     private val type = TypeToken.getParameterized(List::class.java,Post::class.java).type
 
-   //для примера, в текущей версии не нужно
+    val singltonData by lazy { SingltonData }
+
+    //для примера, в текущей версии не нужно
     var nextId:Long by Delegates.observable(
         prefs.getLong(NEXTID_PREFS_KEY,0L)
     ){
@@ -38,6 +45,7 @@ class FilePostRepository(
             it.write(gson.toJson(value))
         }
         data.value=value
+        currentPost.value = value.find { it.id==currentPost.value?.id }
     }
 
     init {
@@ -51,7 +59,7 @@ class FilePostRepository(
         }else emptyList<Post>()
 
 
-        data = MutableLiveData(posts)
+        singltonData.data = MutableLiveData(posts)
     }
 
     override fun like(id: Long) {
@@ -95,5 +103,9 @@ class FilePostRepository(
         const val POSTS_PREFS_KEY = "posts"
         const val NEXTID_PREFS_KEY = "nextId"
         const val FILE_NAME = "posts.json"
+    }
+    object SingltonData{
+        val currentPost = MutableLiveData<Post?>(null)
+        var data = MutableLiveData<List<Post>>(null)
     }
 }

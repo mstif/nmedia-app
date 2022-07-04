@@ -9,6 +9,7 @@ interface PostRepository {
     val data: LiveData< List<Post>>
     val sharePostContent:SingleLiveEvent<String>
     val currentPost:MutableLiveData<Post?>
+   // val currentSinglePost:MutableLiveData<Post?>
     fun like(id:Long)
     fun share(id:Long)
     fun delete(id: Long)

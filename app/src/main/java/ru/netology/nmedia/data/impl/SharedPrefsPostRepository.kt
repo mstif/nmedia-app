@@ -20,8 +20,10 @@ class SharedPrefsPostRepository(
     override val data:MutableLiveData<List<Post>>
     override val sharePostContent = SingleLiveEvent<String>()
     override val currentPost = MutableLiveData<Post?>(null)
+    //override val currentSinglePost: MutableLiveData<Post?>
+   //     get() = TODO("Not yet implemented")
 
-   //для примера, в текущей версии не нужно
+    //для примера, в текущей версии не нужно
     var nextId:Long by Delegates.observable(
         prefs.getLong(NEXTID_PREFS_KEY,0L)
     ){

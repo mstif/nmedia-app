@@ -53,6 +53,9 @@ class PostsAdapter(
             binding.playButton.setOnClickListener{
                 listener.onPlayVideo(post.video)
             }
+            binding.contentPost.setOnClickListener{
+                listener.onNavigateClicked(post)
+            }
 
         }
 
@@ -67,7 +70,7 @@ class PostsAdapter(
             imageButtonShare.text = getStringOfCount(post.shareCount)
             imageEye.text = getStringOfCount(post.seenCount)
             dropdownMenu.setOnClickListener { popupMenu.show() }
-            videoGroup.visibility =  if(post.video.isNullOrBlank()) View.GONE else View.VISIBLE
+            videoGroup.visibility =  if(post.video.isBlank()) View.GONE else View.VISIBLE
 
 
         }
