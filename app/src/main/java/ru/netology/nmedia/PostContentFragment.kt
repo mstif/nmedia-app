@@ -11,11 +11,11 @@ import ru.netology.nmedia.databinding.ActivityPostContentBinding
 
 class PostContentFragment
 // (private  val initialContent:String?)
-        : Fragment() {
-private val initialContent
-get() = requireArguments().getString(INITIAL_CONTENT_KEY)
-private val initialFragment
-get()  = requireArguments().getString(INITIAL_KEY)
+    : Fragment() {
+    private val initialContent
+        get() = requireArguments().getString(INITIAL_CONTENT_KEY)
+    private val initialKeyFragment
+        get() = requireArguments().getString(INITIAL_FRAGMENT_KEY)
 //    override fun onBackPressed() {
 //        setResult(Activity.RESULT_CANCELED, Intent())
 //        super.onBackPressed()
@@ -26,10 +26,10 @@ get()  = requireArguments().getString(INITIAL_KEY)
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = ActivityPostContentBinding.inflate(layoutInflater,container,false).also {binding->
+    ): View = ActivityPostContentBinding.inflate(layoutInflater, container, false).also { binding ->
 
         //val inputContent = intent?.getStringExtra(Intent.EXTRA_TEXT)
-       // binding.edit.setText(intent?.getStringExtra(Intent.EXTRA_TEXT))
+        // binding.edit.setText(intent?.getStringExtra(Intent.EXTRA_TEXT))
 
         binding.edit.setText(initialContent)
         binding.edit.requestFocus()
@@ -43,28 +43,29 @@ get()  = requireArguments().getString(INITIAL_KEY)
             val text = binding.edit.text
             if (!text.isNullOrBlank()) {
                 val resultBundle = Bundle(1)
-                resultBundle.putString(RESULT_KEY,text.toString())
-                setFragmentResult(requestKey = initialFragment?: REQUEST_KEY,resultBundle)
+                resultBundle.putString(RESULT_KEY, text.toString())
+                setFragmentResult(requestKey = initialKeyFragment ?: REQUEST_KEY, resultBundle)
                 //setFragmentResult(requestKey = REQUEST_KEY_SINGLE,resultBundle)
-               // setResult(Activity.RESULT_CANCELED, intent)
+                // setResult(Activity.RESULT_CANCELED, intent)
             }
             findNavController().popBackStack()
         }
 
 
+    companion object {
+        const val RESULT_KEY = "postNewContent"
+        const val REQUEST_KEY = "requestKey"
+        const val REQUEST_KEY_SINGLE = "singlePost"
+        const val INITIAL_CONTENT_KEY = "initialContent"
+        const val INITIAL_FRAGMENT_KEY = "initialFragmentKey"
 
-     companion object {
-         const val RESULT_KEY = "postNewContent"
-         const val REQUEST_KEY = "requestKey"
-         const val REQUEST_KEY_SINGLE = "singlePost"
-         const val INITIAL_CONTENT_KEY = "initialContent"
-         const val INITIAL_KEY = "initialFragment"
         // fun create(initialContentPost:String?)= PostContentFragment().apply {
-         //    this.arguments=createBundle(initialContentPost) }
-         fun createBundle(initialContentPost: String?,initialFragment:String)= Bundle(2).apply {
-             putString(INITIAL_CONTENT_KEY,initialContentPost)
-             putString(INITIAL_KEY,initialFragment)
-         }
+        //    this.arguments=createBundle(initialContentPost) }
+        fun createBundle(initialContentPost: String?, initialFragmentKey: String) =
+            Bundle(2).apply {
+                putString(INITIAL_CONTENT_KEY, initialContentPost)
+                putString(INITIAL_FRAGMENT_KEY, initialFragmentKey)
+            }
 
     }
 

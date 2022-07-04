@@ -20,7 +20,7 @@ class PostEditFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var idPost: Long? = null
     val viewModel: PostViewModel by viewModels<PostViewModel>()
-    private lateinit var  post: Post
+    private lateinit var post: Post
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +36,9 @@ class PostEditFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
 
-        if(viewModel.currentPost.value==null)
+        if (viewModel.currentPost.value == null)
             RuntimeException("Error receive post parameter")
-        else post = viewModel.currentPost.value?:Post()
+        else post = viewModel.currentPost.value ?: Post()
 
 
         val binding = PostBinding.inflate(layoutInflater, container, false).also { binding ->
@@ -110,7 +110,10 @@ class PostEditFragment : Fragment() {
         viewModel.navigateToPostScreenEvent.observe(viewLifecycleOwner) { initialContent ->
             findNavController().navigate(
                 R.id.action_postEditFragment_to_postContentFragment,
-                PostContentFragment.createBundle(initialContent,PostContentFragment.REQUEST_KEY_SINGLE)
+                PostContentFragment.createBundle(
+                    initialContent,
+                    PostContentFragment.REQUEST_KEY_SINGLE
+                )
             )
         }
         setFragmentResultListener(requestKey = PostContentFragment.REQUEST_KEY_SINGLE) { requestKey, bundle ->
@@ -128,10 +131,10 @@ class PostEditFragment : Fragment() {
     }
 
     fun bind(binding: PostBinding) = with(binding) {
-       // val post = viewModel.dataViewModel.value?.find { it.id == idPost }
+        // val post = viewModel.dataViewModel.value?.find { it.id == idPost }
         if (viewModel.currentPost.value == null) return@with
 
-        this@PostEditFragment.post= viewModel.currentPost.value?:Post()
+        this@PostEditFragment.post = viewModel.currentPost.value ?: Post()
         imageButtonFavorit.isChecked = post.liked
         imageButtonFavorit.text = getStringOfCount(post.likeCount)
         contentPost.text = post.content
@@ -151,9 +154,6 @@ class PostEditFragment : Fragment() {
     companion object {
 
         const val INITIAL_POST_KEY = "openSinglePost"
-        fun create(postId: Long) = PostEditFragment().apply {
-            this.arguments = createBundle(postId)
-        }
 
         fun createBundle(postId: Long) = Bundle(1).apply {
             putLong(INITIAL_POST_KEY, postId)

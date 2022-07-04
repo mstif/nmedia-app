@@ -63,38 +63,39 @@ class FeedFragment : Fragment() {
 
             val videoPlayIntent = Intent.createChooser(intent, getString(R.string.chooser_player))
             //if (videoPlayIntent.resolveActivity(packageManager) != null) {
-                startActivity(videoPlayIntent)
+            startActivity(videoPlayIntent)
             //}
         }
-        setFragmentResultListener(requestKey = PostContentFragment.REQUEST_KEY){
-            requestKey, bundle ->
-            if(requestKey!=PostContentFragment.REQUEST_KEY)return@setFragmentResultListener
-            val postContent = bundle.getString(PostContentFragment.RESULT_KEY)?:return@setFragmentResultListener
+        setFragmentResultListener(requestKey = PostContentFragment.REQUEST_KEY) { requestKey, bundle ->
+            if (requestKey != PostContentFragment.REQUEST_KEY) return@setFragmentResultListener
+            val postContent =
+                bundle.getString(PostContentFragment.RESULT_KEY) ?: return@setFragmentResultListener
             viewModel.onSaveButtonClicked(postContent)
             viewModel.currentPost.value = null
         }
 
 
 
-        viewModel.navigateToPostScreenEvent.observe(this) {initialContent->
-            findNavController().navigate(R.id.to_postContentFragment,
-            PostContentFragment.createBundle(initialContent,PostContentFragment.REQUEST_KEY))
-
+        viewModel.navigateToPostScreenEvent.observe(this) { initialContent ->
+            findNavController().navigate(
+                R.id.to_postContentFragment,
+                PostContentFragment.createBundle(initialContent, PostContentFragment.REQUEST_KEY)
+            )
 
 
         }
-        viewModel.navigateToPostSingle.observe(this) {postToSingle->
+        viewModel.navigateToPostSingle.observe(this) { postToSingle ->
             viewModel.currentPost.value = postToSingle
-            findNavController().navigate(R.id.postEditFragment,
-                PostEditFragment.createBundle(postToSingle.id))
-
+            findNavController().navigate(
+                R.id.postEditFragment,
+                PostEditFragment.createBundle(postToSingle.id)
+            )
 
 
         }
 
 
     }
-
 
 
     override fun onCreateView(
@@ -110,15 +111,16 @@ class FeedFragment : Fragment() {
             adapter.submitList(posts)
         }
         binding.fab.setOnClickListener {
-           viewModel.currentPost.value = null
+            viewModel.currentPost.value = null
             viewModel.onAddClicked()
         }
 
 
     }.root
-companion object{
-    const val TAG = "FeedFragment"
-}
+
+    companion object {
+        const val TAG = "FeedFragment"
+    }
 
 }
 
