@@ -17,29 +17,32 @@ class SharedPrefsPostRepository(
     application: Application
 ) : PostRepository {
     private val prefs = application.getSharedPreferences("repo", Context.MODE_PRIVATE)
-    override val data:MutableLiveData<List<Post>>
+    override val data: MutableLiveData<List<Post>>
     override val sharePostContent = SingleLiveEvent<String>()
     override val currentPost = MutableLiveData<Post?>(null)
+    //override val currentSinglePost: MutableLiveData<Post?>
+    //     get() = TODO("Not yet implemented")
 
-   //для примера, в текущей версии не нужно
-    var nextId:Long by Delegates.observable(
-        prefs.getLong(NEXTID_PREFS_KEY,0L)
-    ){
-        _,_,newValue->prefs.edit{putLong(NEXTID_PREFS_KEY,newValue)}
+    //для примера, в текущей версии не нужно
+    var nextId: Long by Delegates.observable(
+        prefs.getLong(NEXTID_PREFS_KEY, 0L)
+    ) { _, _, newValue ->
+        prefs.edit { putLong(NEXTID_PREFS_KEY, newValue) }
     }
 
-    private var posts get() = checkNotNull(data.value) { "Data value should not be null" }
-    set(value) {
-        prefs.edit {
-            val serializedPrefs = Json.encodeToString(value)
-            putString(POSTS_PREFS_KEY,serializedPrefs)
+    private var posts
+        get() = checkNotNull(data.value) { "Data value should not be null" }
+        set(value) {
+            prefs.edit {
+                val serializedPrefs = Json.encodeToString(value)
+                putString(POSTS_PREFS_KEY, serializedPrefs)
+            }
+            data.value = value
         }
-        data.value=value
-    }
 
     init {
         val serializedPrefs = prefs.getString(POSTS_PREFS_KEY, null)
-        val posts:List<Post> = if (serializedPrefs != null) {
+        val posts: List<Post> = if (serializedPrefs != null) {
             Json.decodeFromString(serializedPrefs)
         } else emptyList()
         data = MutableLiveData(posts)
@@ -79,7 +82,8 @@ class SharedPrefsPostRepository(
     }
 
     private fun insert(post: Post) {
-        posts = listOf(post.copy(id = if(posts.isEmpty())1 else posts.maxOf { it.id } + 1)) + posts
+        posts =
+            listOf(post.copy(id = if (posts.isEmpty()) 1 else posts.maxOf { it.id } + 1)) + posts
     }
 
     private companion object {

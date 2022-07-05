@@ -19,39 +19,48 @@ class FilePostRepository(
     private val application: Application
 ) : PostRepository {
     private val prefs = application.getSharedPreferences("repo", Context.MODE_PRIVATE)
-    override val data:MutableLiveData<List<Post>>
+    override val data: MutableLiveData<List<Post>>
+        get() = singltonData.data
+
     override val sharePostContent = SingleLiveEvent<String>()
-    override val currentPost = MutableLiveData<Post?>(null)
+    override val currentPost: MutableLiveData<Post?>
+        get() = singltonData.currentPost
+
+    // override val currentSinglePost = SingltonData.currentPost
     private val gson = Gson()
-    private val type = TypeToken.getParameterized(List::class.java,Post::class.java).type
+    private val type = TypeToken.getParameterized(List::class.java, Post::class.java).type
 
-   //для примера, в текущей версии не нужно
-    var nextId:Long by Delegates.observable(
-        prefs.getLong(NEXTID_PREFS_KEY,0L)
-    ){
-        _,_,newValue->prefs.edit{putLong(NEXTID_PREFS_KEY,newValue)}
+    val singltonData by lazy { SingltonData }
+
+    //для примера, в текущей версии не нужно
+    var nextId: Long by Delegates.observable(
+        prefs.getLong(NEXTID_PREFS_KEY, 0L)
+    ) { _, _, newValue ->
+        prefs.edit { putLong(NEXTID_PREFS_KEY, newValue) }
     }
 
-    private var posts get() = checkNotNull(data.value) { "Data value should not be null" }
-    set(value) {
-        application.openFileOutput(FILE_NAME,Context.MODE_PRIVATE).bufferedWriter().use {
-            it.write(gson.toJson(value))
+    private var posts
+        get() = checkNotNull(data.value) { "Data value should not be null" }
+        set(value) {
+            application.openFileOutput(FILE_NAME, Context.MODE_PRIVATE).bufferedWriter().use {
+                it.write(gson.toJson(value))
+            }
+            data.value = value
+            currentPost.value = value.find { it.id == currentPost.value?.id }
         }
-        data.value=value
-    }
 
     init {
         val postsFile = application.filesDir.resolve(FILE_NAME)
-        val posts:List<Post> = if(postsFile.exists()){
+        val posts: List<Post> = if (postsFile.exists()) {
             val inputStream = application.openFileInput(FILE_NAME)
             val reader = inputStream.bufferedReader()
             reader.use {
-                gson.fromJson(it,type)
+                gson.fromJson(it, type)
             }
-        }else emptyList<Post>()
+        } else emptyList<Post>()
 
 
-        data = MutableLiveData(posts)
+        singltonData.data = MutableLiveData(posts)
     }
 
     override fun like(id: Long) {
@@ -88,12 +97,18 @@ class FilePostRepository(
     }
 
     private fun insert(post: Post) {
-        posts = listOf(post.copy(id = if(posts.isEmpty())1 else posts.maxOf { it.id } + 1)) + posts
+        posts =
+            listOf(post.copy(id = if (posts.isEmpty()) 1 else posts.maxOf { it.id } + 1)) + posts
     }
 
     private companion object {
         const val POSTS_PREFS_KEY = "posts"
         const val NEXTID_PREFS_KEY = "nextId"
         const val FILE_NAME = "posts.json"
+    }
+
+    object SingltonData {
+        val currentPost = MutableLiveData<Post?>(null)
+        var data = MutableLiveData<List<Post>>(null)
     }
 }
