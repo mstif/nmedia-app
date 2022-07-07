@@ -37,7 +37,7 @@ class PostEditFragment : Fragment() {
         // Inflate the layout for this fragment
 
         if (viewModel.currentPost.value == null)
-            RuntimeException("Error receive post parameter")
+            throw RuntimeException("Error receive post parameter")
         else post = viewModel.currentPost.value ?: Post()
 
 
