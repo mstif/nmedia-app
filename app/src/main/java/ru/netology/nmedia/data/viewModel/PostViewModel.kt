@@ -30,8 +30,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application),
 
     // val currentSinglePost by repository::currentSinglePost
     val currentPost by repository::currentPost
+
     override fun onLikeClicked(post: Post) = repository.like(post.id)
     override fun onShareClicked(post: Post) = repository.share(post.id)
+
     override fun onDeleteClicked(post: Post) = repository.delete(post.id)
     override fun onEditClicked(post: Post) {
         currentPost.value = post
@@ -60,7 +62,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application),
             published = currentDate.toString(), author = "Me",
             video = url
         )
-
+        currentPost.value = editedPost
         repository.save(editedPost)
         // currentPost.value = null
     }
