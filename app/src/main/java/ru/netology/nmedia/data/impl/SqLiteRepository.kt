@@ -43,7 +43,7 @@ class SqLiteRepository(private val dao: PostDao) : PostRepository {
 
     override fun delete(id: Long) {
         dao.removeById(id)
-        setCurrentPost(id)
+       // setCurrentPost(id)
     }
 
     override fun save(post: Post) {
