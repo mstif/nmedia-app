@@ -17,7 +17,7 @@ import ru.netology.nmedia.databinding.ActivityMainBinding
 
 class FeedFragment : Fragment() {
 
-    val viewModel: PostViewModel by viewModels<PostViewModel>()
+    val viewModel: PostViewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

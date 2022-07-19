@@ -16,10 +16,10 @@ import java.util.*
 
 class PostViewModel(application: Application) : AndroidViewModel(application),
     PostInteractionListener {
-    //private val repository: PostRepository = FilePostRepository(application)
-     private val repository: PostRepository = SqLiteRepository(
+
+    private val repository: PostRepository = SqLiteRepository(
         dao = AppDb.getInstance(
-        context = application
+            context = application
         ).postDao
     )
     val dataViewModel by repository::data
@@ -28,16 +28,17 @@ class PostViewModel(application: Application) : AndroidViewModel(application),
     val navigateToPostSingle = SingleLiveEvent<Post>()
     val playVideoFromPost = SingleLiveEvent<String>()
 
-    // val currentSinglePost by repository::currentSinglePost
+
     val currentPost by repository::currentPost
+
     override fun onLikeClicked(post: Post) = repository.like(post.id)
     override fun onShareClicked(post: Post) = repository.share(post.id)
+
     override fun onDeleteClicked(post: Post) = repository.delete(post.id)
     override fun onEditClicked(post: Post) {
         currentPost.value = post
         navigateToPostScreenEvent.value = post.content
 
-        //navigateToPostScreenEvent.call()
     }
 
     override fun onPlayVideo(url: String) {
@@ -48,19 +49,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application),
         navigateToPostSingle.value = post
     }
 
+    fun getPostById(id: Long): Post? = repository.getPostById(id)
 
     fun onSaveButtonClicked(content: String) {
         if (content.isBlank()) return
-        val url =  getVideoUrl(content)
-        val sdf = SimpleDateFormat("dd.MM.yyyy hh:mm",Locale.getDefault())
+        val url = getVideoUrl(content)
+        val sdf = SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.getDefault())
         val currentDate = sdf.format(Date())
-        val editedPost = currentPost.value?.copy(content = content,video = url) ?: Post(
+        val editedPost = currentPost.value?.copy(content = content, video = url) ?: Post(
             id = PostRepository.NEW_POST_ID,
             content = content,
             published = currentDate.toString(), author = "Me",
             video = url
         )
-
+        currentPost.value = editedPost
         repository.save(editedPost)
         // currentPost.value = null
     }
@@ -70,14 +72,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application),
         navigateToPostScreenEvent.call()
     }
 
-    private fun  getVideoUrl(content: String): String {
+    private fun getVideoUrl(content: String): String {
         val startIndex = content.indexOf("http")
-        if(startIndex > -1) {
+        if (startIndex > -1) {
             var endIndex = content.indexOf(" ", startIndex)
-            if(endIndex == -1 ){
-                endIndex =content.indexOf('\n', startIndex)
+            if (endIndex == -1) {
+                endIndex = content.indexOf('\n', startIndex)
             }
-            return content.substring(startIndex, if(endIndex > -1) endIndex else content.length)
+            return content.substring(startIndex, if (endIndex > -1) endIndex else content.length)
 
         }
         return ""
