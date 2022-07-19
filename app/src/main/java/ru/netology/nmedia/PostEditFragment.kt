@@ -73,11 +73,11 @@ class PostEditFragment : Fragment() {
         binding.imageButtonFavorit.setOnClickListener {
             viewModel.onLikeClicked(post)
 
-           // bind(binding)
+            // bind(binding)
         }
         binding.imageButtonShare.setOnClickListener {
             viewModel.onShareClicked(post)
-           // bind(binding)
+            // bind(binding)
         }
         binding.video.setOnClickListener {
             viewModel.onPlayVideo(post.video)
@@ -121,12 +121,13 @@ class PostEditFragment : Fragment() {
             val postContent =
                 bundle.getString(PostContentFragment.RESULT_KEY) ?: return@setFragmentResultListener
             viewModel.onSaveButtonClicked(postContent)
-           // bind(binding)
+            // bind(binding)
 
         }
 
         viewModel.dataViewModel.observe(viewLifecycleOwner) { posts ->
-            viewModel.currentPost.value = posts.find { it.id == idPost }
+            // viewModel.currentPost.value = posts.find { it.id == idPost }
+            viewModel.currentPost.value = viewModel.getPostById(idPost ?: -1)
             bind(binding)
         }
 

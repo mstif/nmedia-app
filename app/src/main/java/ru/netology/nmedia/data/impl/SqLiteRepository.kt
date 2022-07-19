@@ -1,5 +1,6 @@
 package ru.netology.nmedia.data.impl
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import ru.netology.nmedia.Post
@@ -10,9 +11,7 @@ import ru.netology.nmedia.db.toModel
 import x.y.z.SingleLiveEvent
 
 class SqLiteRepository(private val dao: PostDao) : PostRepository {
-   //private val singletonData by lazy { SingletonData }
 
-    //override val data = MutableLiveData(dao.getAll())
     override val data = dao.getAll().map { entities ->
         entities.map { it.toModel() }
     }
@@ -22,45 +21,39 @@ class SqLiteRepository(private val dao: PostDao) : PostRepository {
     override val currentPost = MutableLiveData<Post?>(null)
 
 
-
-
-
     override fun like(id: Long) {
         dao.likeById(id)
-
-       // setCurrentPost(id)
-
 
     }
 
     override fun share(id: Long) {
         dao.shareById(id)
-        sharePostContent.value = data.value?.find { it.id==id }?.content
-       // setCurrentPost(id)
-
+        sharePostContent.value = data.value?.find { it.id == id }?.content
 
     }
 
     override fun delete(id: Long) {
         dao.removeById(id)
-       // setCurrentPost(id)
     }
 
     override fun save(post: Post) {
 
         dao.save(post.toEntity())
 
-        //setCurrentPost(post.id)
     }
 
-   // object SingletonData
-  //  { val currentPost = MutableLiveData<Post?>(null)
-       // val data = MutableLiveData<List<Post>>(null)
-   // }
+    // object SingletonData
+    //  { val currentPost = MutableLiveData<Post?>(null)
+    // val data = MutableLiveData<List<Post>>(null)
+    // }
 
-    private fun setCurrentPost(id: Long) {
-        currentPost.value = data.value?.find { it.id == id }
+    //private fun setCurrentPost(id: Long) {
+    //    currentPost.value = data.value?.find { it.id == id }
+    // }
+
+    override fun getPostById(id: Long): Post {
+        val p = dao.getPostById(id).toModel()
+        return p
     }
-
 
 }
