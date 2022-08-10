@@ -93,6 +93,10 @@ class FilePostRepository(
 
     }
 
+    override fun getPostById(id: Long): Post? {
+        TODO("Not yet implemented")
+    }
+
     private fun update(post: Post) {
         posts = posts.map { if (it.id == post.id) post else it }
     }
